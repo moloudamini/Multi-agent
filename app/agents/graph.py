@@ -39,11 +39,7 @@ def create_agent_graph(checkpointer=None):
     workflow.add_conditional_edges(
         "supervisor",
         route_supervisor,
-        {
-            "researcher": "researcher",
-            "writer": "writer",
-            "end": END
-        },
+        {"researcher": "researcher", "writer": "writer", "end": END},
     )
 
     # 4. Add edges from researcher

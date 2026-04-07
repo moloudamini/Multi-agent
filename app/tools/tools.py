@@ -4,6 +4,7 @@ from typing import Annotated
 
 from langchain_tavily import TavilySearch
 from langchain_core.tools import tool
+from .rag import rag_search
 
 
 @tool
@@ -47,7 +48,7 @@ def file_reader(file_path: Annotated[str, "The path to the file to be read."]):
 
 
 # Registry of all tools
-_all_tools = [web_search, calculator, file_reader]
+_all_tools = [web_search, calculator, file_reader, rag_search]
 
 
 def get_all_tools():

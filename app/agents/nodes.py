@@ -77,7 +77,14 @@ async def researcher_node(state: AgentState) -> dict:
     llm = get_llm().bind_tools(tools)
 
     system_prompt = """You are a researcher. Use tools to find information.
-Summarize what you find or call tools if more info is needed."""
+
+Tool selection guide:
+- Use `rag_search` FIRST for questions about specific companies, people, or topics (e.g. Google, Apple, investors). It searches the internal knowledge base.
+- Use `web_search` for current events, general knowledge, or when rag_search returns no useful results.
+- Use `calculator` for math.
+- Use `file_reader` to read local files.
+
+Always try `rag_search` before `web_search` when the query is about a named entity or topic."""
 
     messages = [SystemMessage(content=system_prompt), *state["messages"]]
 

@@ -24,9 +24,7 @@ load_dotenv()
 async def lifespan(app: FastAPI):
     """Application lifespan manager."""
     # 1. Setup LangGraph SQLite Checkpointer
-    async with AsyncSqliteSaver.from_conn_string(
-        "multi-agent/agents.sqlite"
-    ) as checkpointer:
+    async with AsyncSqliteSaver.from_conn_string("agents.sqlite") as checkpointer:
         app.state.checkpointer = checkpointer
 
         # 2. Verify Ollama connection
