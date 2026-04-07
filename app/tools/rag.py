@@ -44,17 +44,22 @@ def rag_search(
         if not retrieved_docs:
             return "No relevant information found in the knowledge base."
 
-        content = (
-            f"Answer this question: {query} only based on the following information\n\n"
-            + "\n\n".join(
-                [f"{i + 1}. {doc.page_content}" for i, doc in enumerate(retrieved_docs)]
-            )
+        chunks = "\n\n".join(
+            [f"[{i + 1}] {doc.page_content}" for i, doc in enumerate(retrieved_docs)]
+        )
+        prompt = (
+            "You are a precise assistant. Answer the question using ONLY the context below.\n"
+            "Rules:\n"
+            "- If the context does not contain enough information to answer, say exactly: "
+            "'The knowledge base does not contain enough information to answer this question.'\n"
+            "- Do NOT use any outside knowledge or make assumptions beyond what is in the context.\n"
+            "- Keep the answer concise and factual.\n"
+            "- Cite the source number (e.g. [1], [2]) for each fact you state.\n\n"
+            f"Context:\n{chunks}\n\n"
+            f"Question: {query}"
         )
         llm = ChatOllama(model="llama3.2")
-        results = llm.invoke([HumanMessage(content=content)])
-        logger.info(
-            f"RAG search successful for query: {query} based on this content: {content}"
-        )
+        results = llm.invoke([HumanMessage(content=prompt)])
         return results.content
 
     except RuntimeError:

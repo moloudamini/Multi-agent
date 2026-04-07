@@ -112,8 +112,12 @@ async def writer_node(state: AgentState) -> dict:
     """
     llm = get_llm()
 
-    system_prompt = """You are a writer. Synthesize all gathered information into a
-clear, well-structured final answer for the user"""
+    system_prompt = """You are a writer. Synthesize the research results into a clear, well-structured answer.
+
+Rules:
+- Use ONLY information from the research messages above. Do not add outside knowledge.
+- If the research did not find an answer, say so clearly instead of guessing.
+- Be concise and factual. Do not speculate or extrapolate beyond what was found."""
 
     messages = [SystemMessage(content=system_prompt), *state["messages"]]
 
